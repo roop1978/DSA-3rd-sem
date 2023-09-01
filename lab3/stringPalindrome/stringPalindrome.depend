@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1692246180 source:c:\users\student\desktop\roopanshi_220911624\lab3\stringpalindrome\main.c
+	<stdio.h>
+	<stdlib.h>
+	<malloc.h>
+

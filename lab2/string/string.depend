@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1691640480 source:c:\users\student\desktop\roopanshi_220911624\string\main.c
+	<stdio.h>
+	<stdlib.h>
+
+1691640547 source:c:\users\student\desktop\roopanshi_220911624\string\concat.c
+	<stdio.h>
+	<stdlib.h>
+
+1691640880 source:c:\users\student\desktop\roopanshi_220911624\string\compare.c
+	<stdio.h>
+	<stdlib.h>
+
