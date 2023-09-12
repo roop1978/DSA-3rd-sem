@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1694068106 source:d:\junej\onedrive\desktop\ds lab\postfixevaluation\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
