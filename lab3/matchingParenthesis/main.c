@@ -3,27 +3,27 @@
 
 #define MAX 100
 
-struct stack {
-  char stck[MAX];
+
+  char stack[MAX];
   int top;
-}s;
+
 
 void push(char item) {
-  if (s.top == (MAX - 1))
+  if (top == (MAX - 1))
     printf("Stack is Full\n");
 
   else {
-    s.top = s.top + 1;
-    s.stck[s.top] = item;
+    top = top + 1;
+    stack[top] = item;
   }
 }
 
 void pop() {
-  if (s.top == -1)
+  if (top == -1)
     printf("Stack is Empty\n");
 
   else
-    s.top = s.top - 1;
+    top = top - 1;
 }
 
 int checkPair(char val1,char val2){
@@ -44,9 +44,9 @@ int checkBalanced(char expr[], int len){
             // if you look closely above {{}} will be matched with pair, Thus, stack "Empty"
             //but an extra closing parenthesis like '}' will never be matched
             //so there is no point looking forward
-        if (s.top == -1)
+        if (top == -1)
             return 0;
-        else if(checkPair(s.stck[s.top],expr[i]))
+        else if(checkPair(stack[top],expr[i]))
         {
             pop();
             continue;
@@ -60,12 +60,15 @@ int checkBalanced(char expr[], int len){
     return 1;
 }
 int main() {
-  char exp[MAX] = "({})[]{}";
+  char exp[MAX];
+  printf("enter an expression:\n");
+  gets(exp);
+  printf("\n%s",exp);
   int i = 0;
-  s.top = -1;
+  top = -1;
 
   int len = strlen(exp);
-  checkBalanced(exp, len)?printf("Balanced"): printf("Not Balanced");
+  checkBalanced(exp, len)?printf("\nBalanced"): printf("\nNot Balanced");
 
   return 0;
 }
