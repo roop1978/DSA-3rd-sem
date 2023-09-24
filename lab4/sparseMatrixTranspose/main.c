@@ -1,89 +1,105 @@
-
-
-
 #include <stdio.h>
 #include <stdlib.h>
+#define MAX 100
 
-typedef struct {
+typedef struct
+{
     int row;
     int col;
-    int value;
-} Element;
+    int val;
+} sparse;
 
-void displayMatrix(Element matrix[], int numRows, int numCols) {
-    int k = 1;
-    for (int i = 0; i < numRows; i++) {
-        for (int j = 0; j < numCols; j++) {
-            if (i == matrix[k].row && j == matrix[k].col) {
-                printf("%d ", matrix[k].value);
-                k++;
-            } else {
-                printf("0 ");
-            }
+void readsparse(sparse a[], int m, int n)
+{
+    int i, j, k, item, p;
+    a[0].row = m;
+    a[0].col = n;
+    k = 1;
+
+    printf("\nEnter the elements:\n");
+
+    for (i = 0; i < m; i++)
+    {
+        for (j = 0; j < n; j++)
+        {
+            scanf("%d", &item);
+            if (item == 0)
+                continue;
+            a[k].row = i;
+            a[k].col = j;
+            a[k].val = item;
+            k++;
         }
-        printf("\n");
+    }
+    a[0].val = k - 1;
+
+    printf("\nThe entered sparse matrix is:\n");
+    printf("\nRow\tColumn\tValue\n");
+    for (p = 0; p <= a[0].val; p++)
+    {
+        printf("%d\t", a[p].row);
+        printf("%d\t", a[p].col);
+        printf("%d\n", a[p].val);
     }
 }
 
-void fastTranspose(Element a[], Element b[], int numRows, int numCols) {
-    int rowTerms[numCols];
-    int startingPos[numCols];
+void fast_transpose(sparse a[], sparse b[])
+{
+    int total[100], index[100]; // Replace row_terms and start_pos
+    int i, j, p;
 
-    for (int i = 0; i < numCols; i++) {
-        rowTerms[i] = 0;
-    }
+    int numTerms = a[0].val;//numterms is number of non zero values
+    int numCols = a[0].col;//no of columns
 
-    for (int i = 1; i <= a[0].value; i++) {
-        rowTerms[a[i].col]++;
-    }
-
-    startingPos[0] = 1;
-    for (int i = 1; i < numCols; i++) {
-        startingPos[i] = startingPos[i - 1] + rowTerms[i - 1];
-    }
-
-    for (int i = 1; i <= a[0].value; i++) {
-        int j = a[i].col;
-        int pos = startingPos[j];
-        b[pos].row = a[i].col;
-        b[pos].col = a[i].row;
-        b[pos].value = a[i].value;
-        startingPos[j]++;
-    }
+// b ki pehli row mei col, row aur value store ki hai
 
     b[0].row = numCols;
-    b[0].col = numRows;
-    b[0].value = a[0].value;
-}
+    b[0].col = a[0].row;
+    b[0].val = numTerms;
 
-int main() {
-    int numRows, numCols, numTerms;
+    if (numTerms > 0)
+    {
+        //total aur index vala array bana rahe hai ab
+        for (i = 0; i < numCols; i++)
+            total[i] = 0;
 
-    printf("Enter the number of rows, columns, and non-zero terms: ");
-    scanf("%d %d %d", &numRows, &numCols, &numTerms);
+        for (i = 1; i <= numTerms; i++)
+            total[a[i].col]++;
 
-    Element *sparseMatrix = (Element *)malloc((numTerms + 1) * sizeof(Element));
-    Element *transposedMatrix = (Element *)malloc((numTerms + 1) * sizeof(Element));
+        index[0] = 1;
 
-    printf("Enter the elements (row, column, value):\n");
-    for (int i = 1; i <= numTerms; i++) {
-        scanf("%d %d %d", &sparseMatrix[i].row, &sparseMatrix[i].col, &sparseMatrix[i].value);
+        for (i = 1; i < numCols; i++)
+            index[i] = index[i - 1] + total[i - 1];
+
+        for (i = 1; i <= numTerms; i++)
+        {
+            //transpose kiya
+            j = index[a[i].col]++;
+            b[j].row = a[i].col;
+            b[j].col = a[i].row;
+            b[j].val = a[i].val;
+        }
     }
 
-    sparseMatrix[0].row = numRows;
-    sparseMatrix[0].col = numCols;
-    sparseMatrix[0].value = numTerms;
+    printf("\nThe Fast Transpose sparse matrix is:\n");
+    printf("\nRow\tColumn\tValue\n");
+    for (p = 0; p <= a[0].val; p++)
+    {
+        printf("%d\t", b[p].row);
+        printf("%d\t", b[p].col);
+        printf("%d\n", b[p].val);
+    }
+}
 
-    printf("Original Sparse Matrix:\n");
-    displayMatrix(sparseMatrix, numRows, numCols);
+int main()
+{
+    int m, n, key;
+    sparse a[MAX], b[MAX];
+    printf("\nEnter the no of rows and columns:\t");
+    scanf("%d%d", &m, &n);
 
-    fastTranspose(sparseMatrix, transposedMatrix, numRows, numCols);
-
-    printf("Transposed Sparse Matrix:\n");
-    displayMatrix(transposedMatrix, numCols, numRows);
-
-    free(sparseMatrix);
-    free(transposedMatrix);
+    readsparse(a, m, n);
+    fast_transpose(a, b);
 
     return 0;
 }
