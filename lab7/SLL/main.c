@@ -10,7 +10,7 @@ struct node
 struct node *newNode,*temp,*head,*temp1,*tail;
 
 
-//FUNCTION TO INSERT BEFORE A GIVEN ELEMENT
+//FUNCTION TO INSERT AFTER A GIVEN ELEMENT
 void insert_after()
 {
     int i,target,item;

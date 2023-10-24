@@ -1,56 +1,72 @@
-
-// c program to implement n stacks using arrays
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_SIZE 10
+#define MAX_SIZE 100 // Adjust the size as needed
 
-int n, freespot;
+int n;
+int top[10]; // Assuming a maximum of 10 stacks
 
 int arr[MAX_SIZE];
-int top[MAX_SIZE];
-int next[MAX_SIZE];
 
 void initializeStacks() {
-    printf("Enter number of stacks: ");
+    printf("Enter the number of stacks: ");
     scanf("%d", &n);
 
     for (int i = 0; i < n; i++) {
         top[i] = -1;
     }
-
-    for (int i = 0; i < MAX_SIZE; i++) {
-        next[i] = i + 1;
-    }
-
-    next[MAX_SIZE - 1] = -1;
-    freespot = 0;
 }
 
-void push(int m, int x) {
-    if (freespot == -1) {
-        printf("\nStack overflow");
+void push(int stackNum, int value) {
+    if (stackNum < 0 || stackNum >= n) {
+        printf("\nInvalid stack number");
         return;
     }
 
-    int index = freespot;
-    freespot = next[index];
-    arr[index] = x;
-    next[index] = top[m - 1];
-    top[m - 1] = index;
+    if (top[stackNum] == MAX_SIZE - 1) {
+        printf("\nStack %d overflow", stackNum);
+        return;
+    }
+
+    int index = stackNum * (MAX_SIZE / n) + top[stackNum] + 1;
+    arr[index] = value;
+    top[stackNum]++;
 }
 
-int pop(int m) {
-    if (top[m - 1] == -1) {
-        printf("\nStack underflow");
+int pop(int stackNum) {
+    if (stackNum < 0 || stackNum >= n) {
+        printf("\nInvalid stack number");
         return -1;
     }
 
-    int index = top[m - 1];
-    top[m - 1] = next[index];
-    next[index] = freespot;
-    freespot = index;
-    return arr[index];
+    if (top[stackNum] == -1) {
+        printf("\nStack %d underflow", stackNum);
+        return -1;
+    }
+
+    int index = stackNum * (MAX_SIZE / n) + top[stackNum];
+    int value = arr[index];
+    top[stackNum]--;
+    return value;
+}
+
+void displayStack(int stackNum) {
+    if (stackNum < 0 || stackNum >= n) {
+        printf("\nInvalid stack number");
+        return;
+    }
+
+    printf("Stack %d: ", stackNum);
+    if (top[stackNum] == -1) {
+        printf("Empty\n");
+        return;
+    }
+
+    int index = stackNum * (MAX_SIZE / n);
+    for (int i = index; i <= index + top[stackNum]; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
 }
 
 int main() {
@@ -62,7 +78,8 @@ int main() {
         printf("\nChoose an operation:\n");
         printf("1. Push\n");
         printf("2. Pop\n");
-        printf("3. Exit\n");
+        printf("3. Display Stack\n");
+        printf("4. Exit\n");
         scanf("%d", &choice);
 
         switch (choice) {
@@ -80,6 +97,11 @@ int main() {
                 }
                 break;
             case 3:
+                printf("Enter stack number to display: ");
+                scanf("%d", &stackNum);
+                displayStack(stackNum);
+                break;
+            case 4:
                 exit(0);
             default:
                 printf("Invalid choice. Try again.\n");
